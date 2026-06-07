@@ -1,78 +1,65 @@
 let modInfo = {
-	name: "The ??? Tree",
-	author: "nobody",
-	pointsName: "points",
+	name: "运气树",
+	id: "The-luck-Tree",
+	author: "陈风就是浪",
+	pointsName: "点数",
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
-	offlineLimit: 1,  // In hours
+	initialStartPoints: new Decimal(0),
+	offlineLimit: 1,
 }
 
-// Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "0.1",
+	name: "The luck Tree",
 }
 
-let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+let changelog = `<h1>更新日志</h1><br>
+	<h3>v0.1</h3><br>
+	    初版，一次想法的实现<br>
+		如果有想法或bug提交，可以点击<a href="https://qm.qq.com/q/Ae8KXBQ4HS" target="_blank" style="color:#2196F3;text-decoration:underline">这里</a>加入QQ群交流<br>`
 
-let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
+let winText = `你好……`
 
-// If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
-// (The ones here are examples, all official functions are already taken care of)
-var doNotCallTheseFunctionsEveryTick = ["blowUpEverything"]
+var doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
 }
 
-// Determines if it should show points/sec
 function canGenPoints(){
 	return true
 }
 
-// Calculate points/sec!
 function getPointGen() {
-	if(!canGenPoints())
-		return new Decimal(0)
-
-	let gain = new Decimal(1)
-	return gain
+	return new Decimal(0)
 }
 
-// You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
+	totalResets: new Decimal(0),
+	highestCritChain: 0,
+	totalLuckEarned: new Decimal(0),
+	totalBadLuckEarned: new Decimal(0),
 }}
 
-// Display extra things at the top of the page
 var displayThings = [
+	function() {
+		if (!player.f || !player.f.unlocked) return
+		return "当前概率: <b>" + format(getCurrentPointProb().times(100)) + "%</b>"
+	},
 ]
 
-// Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.points.gte(new Decimal(1000))
 }
 
+var backgroundStyle = {}
 
-
-// Less important things beyond this point!
-
-// Style for the background, can be a function
-var backgroundStyle = {
-
-}
-
-// You can change this if you have things that can be messed up by long tick lengths
 function maxTickLength() {
-	return(3600) // Default is 1 hour which is just arbitrarily large
+	return(3600)
 }
 
-// Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
-// you can cap their current resources with this.
 function fixOldSave(oldVersion){
 }
