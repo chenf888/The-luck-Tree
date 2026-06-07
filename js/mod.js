@@ -52,7 +52,7 @@ var displayThings = [
 ]
 
 function isEndgame() {
-	return player.points.gte(new Decimal(1000))
+	return player.points.gte(new Decimal(1e8))
 }
 
 var backgroundStyle = {}
